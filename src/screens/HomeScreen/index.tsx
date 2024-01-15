@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'Manrope-SemiBold',
+    includeFontPadding: false,
     fontSize: 22,
     color: colors.primaryText,
   },

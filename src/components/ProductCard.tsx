@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   },
   productPriceText: {
     fontFamily: 'Manrope-SemiBold',
+    includeFontPadding: false,
     fontSize: 14,
     color: colors.secondaryText,
   },

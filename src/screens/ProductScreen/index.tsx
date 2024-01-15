@@ -50,14 +50,14 @@ const ProductScreen = () => {
           <Carousel
             data={productData?.images}
             renderItem={({item}) => (
-              <Image source={{uri: item}} style={styles.productImage} />
+              <Image source={{uri: item}} style={styles.productImage} resizeMode='contain' />
             )}
             sliderWidth={screenWidth}
             itemWidth={screenWidth}
             onSnapToItem={index => setActiveSlide(index)}
           />
           <Pagination
-            dotsLength={productData?.images.length}
+            dotsLength={productData?.images?.length}
             activeDotIndex={activeSlide}
             containerStyle={styles.paginationContainer}
             dotStyle={styles.paginationDot}
@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
   cartText: {
     fontSize: 14,
     fontFamily: 'Manrope-SemiBold',
+    includeFontPadding: false,
     color: colors.navyBlue,
   },
   detailTitleText: {
