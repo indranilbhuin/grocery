@@ -20,6 +20,15 @@ import {
   fetchProductRequest,
   selectProductData,
 } from '../../redux/slices/productSlice';
+import {
+  addToCart,
+  decreaseQuantity,
+  increaseQuantity,
+  selectCartData,
+} from '../../redux/slices/cartSlice';
+import MinusIcon from '../../../assets/images/minus.svg';
+import PlusIcon from '../../../assets/images/plus.svg';
+import {navigate} from '../../utils/navigationUtils';
 
 const ProductScreen = () => {
   const route = useRoute();
@@ -28,16 +37,36 @@ const ProductScreen = () => {
   const productData = useSelector(selectProductData);
   const {width: screenWidth} = Dimensions.get('window');
   const [activeSlide, setActiveSlide] = useState(0);
+  const items = useSelector(selectCartData);
   console.log(productData);
 
   useEffect(() => {
     dispatch(fetchProductRequest(productId));
   }, []);
 
+  const isAddedToCart = productId => items.some(item => item.id === productId);
+
+  const handleAddToCart = product => {
+    dispatch(addToCart({item: product}));
+  };
+
+  const handleIncreaseQuantity = productId => {
+    dispatch(increaseQuantity({id: productId}));
+  };
+
+  const handleDecreaseQuantity = productId => {
+    dispatch(decreaseQuantity({id: productId}));
+  };
+
+  const handleBuyNow = product => {
+    dispatch(addToCart({item: product}));
+    navigate('CartScreen');
+  };
+
   return (
     <View style={styles.mainContainer}>
       <StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
-      <HeaderContainer />
+      <HeaderContainer title={undefined} showCartButton={true} quantity={items?.length} />
       <ScrollView>
         <View style={styles.topContainer}>
           <Text style={styles.titleText}>{productData.title}</Text>
@@ -50,7 +79,11 @@ const ProductScreen = () => {
           <Carousel
             data={productData?.images}
             renderItem={({item}) => (
-              <Image source={{uri: item}} style={styles.productImage} resizeMode='contain' />
+              <Image
+                source={{uri: item}}
+                style={styles.productImage}
+                resizeMode="contain"
+              />
             )}
             sliderWidth={screenWidth}
             itemWidth={screenWidth}
@@ -79,7 +112,12 @@ const ProductScreen = () => {
             <Text style={styles.priceText}>${productData?.price}</Text>
             <View style={styles.promotionContainer}>
               <Text style={styles.promotionText}>
-                ${((productData?.price * productData?.discountPercentage)/100).toFixed(2)} OFF
+                $
+                {(
+                  (productData?.price * productData?.discountPercentage) /
+                  100
+                ).toFixed(2)}{' '}
+                OFF
               </Text>
             </View>
           </View>
@@ -90,14 +128,53 @@ const ProductScreen = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <TouchableOpacity style={styles.addButton}>
-              <Text style={styles.cartText}>Add To Cart</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buyButton}>
-              <Text style={[styles.cartText, {color: colors.white}]}>
-                Buy Now
-              </Text>
-            </TouchableOpacity>
+            {isAddedToCart(productId) ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                }}>
+                <TouchableOpacity
+                  onPress={() => handleDecreaseQuantity(productId)}
+                  style={[styles.plusButton, {marginRight: 11}]}>
+                  <MinusIcon height={20} width={20} />
+                </TouchableOpacity>
+                <Text style={[styles.cartText, {marginRight: 11}]}>
+                  {items.find(item => item.id === productId)?.quantity || 0}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => handleIncreaseQuantity(productId)}
+                  style={styles.plusButton}>
+                  <PlusIcon height={20} width={20} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View>
+                <TouchableOpacity
+                  onPress={() => handleAddToCart(productData)}
+                  style={styles.addButton}>
+                  <Text style={styles.cartText}>Add To Cart</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {isAddedToCart(productId) ? (
+              <TouchableOpacity
+                style={styles.buyButton}
+                onPress={() => navigate('CartScreen')}>
+                <Text style={[styles.cartText, {color: colors.white}]}>
+                  Go To Cart
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.buyButton}
+                onPress={() => handleBuyNow(productData)}>
+                <Text style={[styles.cartText, {color: colors.white}]}>
+                  Buy Now
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={{marginTop: 30, marginBottom: 10}}>
             <Text style={styles.detailTitleText}>Details</Text>
@@ -190,6 +267,15 @@ const styles = StyleSheet.create({
   addButton: {
     height: 56,
     width: 143,
+    borderColor: colors.navyBlue,
+    borderWidth: 1,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  plusButton: {
+    height: 56,
+    width: 56,
     borderColor: colors.navyBlue,
     borderWidth: 1,
     borderRadius: 20,

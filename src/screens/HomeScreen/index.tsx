@@ -20,8 +20,9 @@ import {
 import DropDownIcon from '../../../assets/images/downArrow.svg';
 import DropDown from '../../components/DropDown';
 import Lottie from 'lottie-react-native';
-import { navigate } from '../../utils/navigationUtils';
+import {navigate} from '../../utils/navigationUtils';
 import CartIcon from '../../components/CartIcon';
+import {selectCartData} from '../../redux/slices/cartSlice';
 
 const HomeScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -38,15 +39,16 @@ const HomeScreen = () => {
   const timings = ['1 Hour', '2 Hour', '3 Hour'];
   const [selectedAddress, setSelectedAddress] = useState(addresses[0]);
   const [selectedTiming, setSelectedTiming] = useState(timings[0]);
+  const cartItems = useSelector(selectCartData);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAllProductsRequest());
-    setFilteredProducts(allProducts)
+    setFilteredProducts(allProducts);
   }, []);
 
   useEffect(() => {
-    setFilteredProducts(allProducts)
+    setFilteredProducts(allProducts);
   }, [allProducts.length !== 0]);
 
   const toggleAddressDropdown = () => {
@@ -87,7 +89,7 @@ const HomeScreen = () => {
       <View style={styles.headerContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Hey, Rahul</Text>
-          <CartIcon quantity={3} type={'light'} />
+          <CartIcon quantity={cartItems?.length} type={'light'} />
         </View>
 
         <View style={styles.searchBarContainer}>

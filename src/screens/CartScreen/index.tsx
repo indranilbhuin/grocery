@@ -9,16 +9,20 @@ import React from 'react';
 import HeaderContainer from '../../components/HeaderContainer';
 import {colors} from '../../../assets/colors';
 import ProductList from '../../components/ProductList';
+import {useSelector} from 'react-redux';
+import {selectCartData, selectCartTotal} from '../../redux/slices/cartSlice';
 
 const CartScreen = () => {
+  const items = useSelector(selectCartData);
+  const totalPrice = useSelector(selectCartTotal);
+  const deliveryFee = 35.96;
+
   return (
     <View style={styles.mainContainer}>
       <StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
 
       <HeaderContainer title={`Shopping Cart (5)`} showCartButton={false} />
-      <View style={styles.listContainer}>
-        <ProductList />
-      </View>
+      <ProductList cartItems={items} />
       <View style={styles.bottomContainer}>
         <TouchableOpacity>
           <Text style={styles.editText}>Edit</Text>
@@ -29,19 +33,19 @@ const CartScreen = () => {
           <View style={styles.totalContainer}>
             <Text style={styles.totalText}>Subtotal</Text>
             <Text style={[styles.totalText, {fontFamily: 'Manrope-Medium'}]}>
-              $35.96
+              $ {totalPrice}
             </Text>
           </View>
           <View style={styles.totalContainer}>
             <Text style={styles.totalText}>Delivery</Text>
             <Text style={[styles.totalText, {fontFamily: 'Manrope-Medium'}]}>
-              $35.96
+              $ {deliveryFee}
             </Text>
           </View>
           <View style={styles.totalContainer}>
             <Text style={styles.totalText}>Total</Text>
             <Text style={[styles.totalText, {fontFamily: 'Manrope-Medium'}]}>
-              $35.96
+              $ {totalPrice + deliveryFee}
             </Text>
           </View>
         </View>

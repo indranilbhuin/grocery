@@ -5,7 +5,7 @@ import BackIcon from '../../assets/images/backArrow.svg';
 import {goBack} from '../utils/navigationUtils';
 import CartIcon from './CartIcon';
 
-const HeaderContainer = ({title, showCartButton}) => {
+const HeaderContainer = ({title, showCartButton, quantity}) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.titleContainer}>
@@ -23,7 +23,7 @@ const HeaderContainer = ({title, showCartButton}) => {
         </TouchableOpacity>
         <Text style={styles.headerText}>{title}</Text>
       </View>
-      {showCartButton ? <CartIcon quantity={3} type={'dark'} /> : null}
+      {showCartButton ? <CartIcon quantity={quantity} type={'dark'} /> : null}
     </View>
   );
 };
