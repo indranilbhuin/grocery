@@ -5,9 +5,14 @@ export const colors = {
   lightGray: '#A9B4BC',
   smokeWhite: '#C5CDD2',
   pureWhite: '#E7ECF0',
+  white: '#FFFFFF',
   navyBlue: '#2A4BA0',
   midnightBlue: '#153075',
-  sunflowerYellow: '#F9B023',
+  primaryBackground: '#F9B023',
   goldenYellow: '#FFC83A',
-};
 
+  primaryText: '#F8F9FB',
+  secondaryText: '#1E222B',
+  placeholderText: '#8891A5',
+  black02: "#616A7D"
+};
