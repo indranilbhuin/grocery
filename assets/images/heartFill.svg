@@ -1,0 +1,17 @@
+<svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="15" height="14" fill="#F2F2F2"/>
+<g id="Grocery Home">
+<g clip-path="url(#clip0_0_1)">
+<rect x="-33" y="-492" width="375" height="812" rx="25" fill="white"/>
+<g id="Card">
+<rect id="Rectangle 1309" x="-13" y="-13" width="160" height="194" rx="12" fill="#F8F9FB"/>
+</g>
+<path id="Vector" d="M7.2752 13.35L6.2203 12.3897C2.47357 8.99215 0 6.75139 0 4.00136C0 1.7606 1.7606 0 4.00136 0C5.26725 0 6.48221 0.589292 7.2752 1.52052C8.0682 0.589292 9.28316 0 10.549 0C12.7898 0 14.5504 1.7606 14.5504 4.00136C14.5504 6.75139 12.0768 8.99215 8.33011 12.3969L7.2752 13.35Z" fill="#FF8181"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_1">
+<rect x="-33" y="-492" width="375" height="812" rx="25" fill="white"/>
+</clipPath>
+</defs>
+</svg>
