@@ -5,6 +5,7 @@ import HeartIcon from '../../assets/images/heart.svg';
 import {navigate} from '../utils/navigationUtils';
 
 const ProductCard = ({allProducts}) => {
+  console.log("in produt card", allProducts)
   return (
     <View style={styles.container}>
       {allProducts?.map(product => (

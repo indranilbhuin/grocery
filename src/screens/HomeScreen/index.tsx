@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -17,17 +18,52 @@ import {
   fetchAllProductsRequest,
   selectAllProductsData,
 } from '../../redux/slices/allProductsSlice';
+import DropDownIcon from '../../../assets/images/downArrow.svg';
+import DropDown from '../../components/DropDown';
+import Lottie from 'lottie-react-native';
 
 const HomeScreen = () => {
   const [searchText, setSearchText] = useState('');
   const allProducts = useSelector(selectAllProductsData);
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
+  const [isAddressDropdownVisible, setIsAddressDropdownVisible] =
+    useState(false);
+  const [isTimeDropdownVisible, setIsTimeDropdownVisible] = useState(false);
+  const addresses = [
+    'Green Way 3000, Sylhet',
+    'Whitefield 101, Bangalore',
+    'Another Address 2',
+  ];
+  const timings = ['1 Hour', '2 Hour', '3 Hour'];
+  const [selectedAddress, setSelectedAddress] = useState(addresses[0]);
+  const [selectedTiming, setSelectedTiming] = useState(timings[0]);
   const dispatch = useDispatch();
   console.log(allProducts);
 
   useEffect(() => {
     dispatch(fetchAllProductsRequest());
-  }, [searchText]);
+    setFilteredProducts(allProducts)
+  }, []);
+
+  useEffect(() => {
+    setFilteredProducts(allProducts)
+  }, [allProducts.length !== 0]);
+
+  const toggleAddressDropdown = () => {
+    setIsAddressDropdownVisible(!isAddressDropdownVisible);
+  };
+  const toggleTimingDropdown = () => {
+    setIsTimeDropdownVisible(!isTimeDropdownVisible);
+  };
+
+  const handleAddressSelect = address => {
+    setSelectedAddress(address);
+    setIsAddressDropdownVisible(false);
+  };
+  const handleTimingSelect = timing => {
+    setSelectedTiming(timing);
+    setIsTimeDropdownVisible(false);
+  };
 
   const handleSearch = (text: string) => {
     setSearchText(text);
@@ -70,8 +106,24 @@ const HomeScreen = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Text style={styles.smallText}>DELIVERY TO</Text>
-          <Text style={styles.smallText}>WITHIN</Text>
+          <View>
+            <Text style={styles.smallText}>DELIVERY TO</Text>
+            <TouchableOpacity onPress={toggleAddressDropdown}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={styles.addressText}>{selectedAddress}</Text>
+                <DropDownIcon />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={styles.smallText}>WITHIN</Text>
+            <TouchableOpacity onPress={toggleTimingDropdown}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={styles.addressText}>{selectedTiming}</Text>
+                <DropDownIcon />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <ScrollView>
@@ -87,13 +139,35 @@ const HomeScreen = () => {
             ]}>
             Recommended
           </Text>
-          {filteredProducts.length !== 0 ? (
+          {filteredProducts?.length !== 0 ? (
             <ProductCard allProducts={filteredProducts} />
           ) : (
-            <Text>No products</Text>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Lottie
+                style={styles.lottieImage}
+                source={require('../../../assets/jsons/nothing.json')}
+                autoPlay
+                testID="lottie-image"
+              />
+              <Text style={styles.productNotFoundText}>No product found</Text>
+            </View>
           )}
         </View>
       </ScrollView>
+      <DropDown
+        isDropdownVisible={isAddressDropdownVisible}
+        setIsDropdownVisible={() => setIsAddressDropdownVisible(false)}
+        data={addresses}
+        handleSelectItem={handleAddressSelect}
+        type={'Address'}
+      />
+      <DropDown
+        isDropdownVisible={isTimeDropdownVisible}
+        setIsDropdownVisible={() => setIsAddressDropdownVisible(false)}
+        data={timings}
+        handleSelectItem={handleTimingSelect}
+        type={'Timing'}
+      />
     </View>
   );
 };
@@ -181,5 +255,20 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  addressText: {
+    fontFamily: 'Manrope-Medium',
+    fontSize: 14,
+    marginRight: 10,
+    color: colors.primaryText,
+  },
+  lottieImage: {
+    height: 200,
+    width: 200,
+  },
+  productNotFoundText: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 14,
+    color: colors.charcoalBlack,
   },
 });
