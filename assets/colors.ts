@@ -14,5 +14,7 @@ export const colors = {
   primaryText: '#F8F9FB',
   secondaryText: '#1E222B',
   placeholderText: '#8891A5',
-  black02: "#616A7D"
+  black02: "#616A7D",
+  offWhite: '#FAFBFD',
+  offGray: '#A1A1AB'
 };

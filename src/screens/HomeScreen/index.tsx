@@ -10,7 +10,6 @@ import {
 import React, {useEffect, useState} from 'react';
 import {colors} from '../../../assets/colors';
 import SearchIcon from '../../../assets/images/search.svg';
-import BagIcon from '../../../assets/images/bag.svg';
 import PromotionCard from '../../components/PromotionCard';
 import ProductCard from '../../components/ProductCard';
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,6 +20,8 @@ import {
 import DropDownIcon from '../../../assets/images/downArrow.svg';
 import DropDown from '../../components/DropDown';
 import Lottie from 'lottie-react-native';
+import { navigate } from '../../utils/navigationUtils';
+import CartIcon from '../../components/CartIcon';
 
 const HomeScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -38,7 +39,6 @@ const HomeScreen = () => {
   const [selectedAddress, setSelectedAddress] = useState(addresses[0]);
   const [selectedTiming, setSelectedTiming] = useState(timings[0]);
   const dispatch = useDispatch();
-  console.log(allProducts);
 
   useEffect(() => {
     dispatch(fetchAllProductsRequest());
@@ -87,12 +87,7 @@ const HomeScreen = () => {
       <View style={styles.headerContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Hey, Rahul</Text>
-          <View>
-            <BagIcon height={18} width={18} />
-            <View style={styles.circle}>
-              <Text style={styles.bagQuantityText}>3</Text>
-            </View>
-          </View>
+          <CartIcon quantity={3} type={'light'} />
         </View>
 
         <View style={styles.searchBarContainer}>
@@ -223,25 +218,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-  },
-  circle: {
-    width: 24,
-    height: 24,
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: colors.navyBlue,
-    backgroundColor: colors.primaryBackground,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    left: 6,
-    top: -10,
-  },
-  bagQuantityText: {
-    fontFamily: 'Manrope-SemiBold',
-    fontSize: 14,
-    color: colors.white,
-    marginTop: -2,
   },
   scrollContainer: {
     paddingLeft: '5%',
