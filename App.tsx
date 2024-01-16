@@ -1,16 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet} from 'react-native';
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import HomeStack from './src/navigation/HomeStack';
+import {Provider} from 'react-redux';
+import store from './src/redux/store';
+import {setNavigationRef} from './src/utils/navigationUtils';
 
 const App = () => {
   return (
-    <View>
-      <Text style={{fontSize: 35, fontFamily: 'Manrope-Medium'}}>App</Text>
-      <Text style={{fontSize: 35,}}>App</Text>
+    <Provider store={store}>
+      <NavigationContainer ref={setNavigationRef}>
+        <HomeStack />
+      </NavigationContainer>
+    </Provider>
+  );
+};
 
-    </View>
-  )
-}
+export default App;
 
-export default App
-
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
