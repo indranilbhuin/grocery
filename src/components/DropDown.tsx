@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   },
   addressTitleText: {
     fontFamily: 'Manrope-SemiBold',
+    includeFontPadding: false,
     color: colors.charcoalBlack,
     fontSize: 18,
     marginTop: 10,

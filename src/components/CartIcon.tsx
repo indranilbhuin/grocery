@@ -13,10 +13,11 @@ const CartIcon = ({quantity, type}) => {
       ) : (
         <BagDarkIcon height={20} width={20} />
       )}
-
-      <View style={styles.circle}>
-        <Text style={styles.bagQuantityText}>{quantity}</Text>
-      </View>
+      {quantity === 0 ? null : (
+        <View style={styles.circle}>
+          <Text style={styles.bagQuantityText}>{quantity}</Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -39,8 +40,8 @@ const styles = StyleSheet.create({
   },
   bagQuantityText: {
     fontFamily: 'Manrope-SemiBold',
+    includeFontPadding: false,
     fontSize: 14,
     color: colors.white,
-    marginTop: -2,
   },
 });
