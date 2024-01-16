@@ -29,6 +29,11 @@ import {
 import MinusIcon from '../../../assets/images/minus.svg';
 import PlusIcon from '../../../assets/images/plus.svg';
 import {navigate} from '../../utils/navigationUtils';
+import {
+  addToFavourite,
+  removeFromFavourite,
+  selectFavouriteData,
+} from '../../redux/slices/favouriteSlice';
 
 const ProductScreen = () => {
   const route = useRoute();
@@ -38,6 +43,8 @@ const ProductScreen = () => {
   const {width: screenWidth} = Dimensions.get('window');
   const [activeSlide, setActiveSlide] = useState(0);
   const items = useSelector(selectCartData);
+  const favourites = useSelector(selectFavouriteData);
+
   console.log(productData);
 
   useEffect(() => {
@@ -45,6 +52,8 @@ const ProductScreen = () => {
   }, []);
 
   const isAddedToCart = productId => items.some(item => item.id === productId);
+  const isFavourite = productId =>
+    favourites.some(item => item.id === productId);
 
   const handleAddToCart = product => {
     dispatch(addToCart({item: product}));
@@ -63,10 +72,22 @@ const ProductScreen = () => {
     navigate('CartScreen');
   };
 
+  const handleToggleFavourite = product => {
+    if (isFavourite(product.id)) {
+      dispatch(removeFromFavourite({id: product.id}));
+    } else {
+      dispatch(addToFavourite({item: product}));
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
       <StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
-      <HeaderContainer title={undefined} showCartButton={true} quantity={items?.length} />
+      <HeaderContainer
+        title={undefined}
+        showCartButton={true}
+        quantity={items?.length}
+      />
       <ScrollView>
         <View style={styles.topContainer}>
           <Text style={styles.titleText}>{productData.title}</Text>
@@ -98,9 +119,15 @@ const ProductScreen = () => {
             inactiveDotOpacity={0.6}
             inactiveDotScale={0.8}
           />
-          <View style={styles.heartContainer}>
-            <HeartIcon height={24} width={24} />
-          </View>
+          <TouchableOpacity
+            onPress={() => handleToggleFavourite(productData)}
+            style={styles.heartContainer}>
+            {isFavourite(productId) ? (
+              <HeartIcon height={24} width={24} fill={colors.offRed} />
+            ) : (
+              <HeartIcon height={24} width={24} />
+            )}
+          </TouchableOpacity>
         </View>
         <View style={styles.productDetailsContainer}>
           <View

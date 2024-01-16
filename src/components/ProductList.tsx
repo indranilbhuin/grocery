@@ -1,23 +1,36 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {Image, LayoutAnimation, StyleSheet, Text, TouchableOpacity, UIManager, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import {colors} from '../../assets/colors';
 import MinusIcon from '../../assets/images/minus.svg';
 import PlusIcon from '../../assets/images/plus.svg';
 import {useDispatch} from 'react-redux';
 import {decreaseQuantity, increaseQuantity} from '../redux/slices/cartSlice';
 
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
 const ProductList = ({cartItems}) => {
   const dispatch = useDispatch();
-  const handleIncreaseQuantity = productId => {
-    dispatch(increaseQuantity({id: productId}));
+  const [visibleItems, setVisibleItems] = useState(cartItems);
+
+  useEffect(() => {
+    setVisibleItems(cartItems);
+  }, [cartItems]);
+
+  const handleIncreaseQuantity = (productId) => {
+    dispatch(increaseQuantity({ id: productId }));
   };
 
-  const handleDecreaseQuantity = productId => {
-    dispatch(decreaseQuantity({id: productId}));
+  const handleDecreaseQuantity = (productId) => {
+    dispatch(decreaseQuantity({ id: productId }));
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+    setVisibleItems((prevItems) =>
+      prevItems.filter((item) => item.id !== productId)
+    );
   };
   return (
     <View style={{paddingLeft: '5%', paddingRight: '5%', marginTop: 30}}>
-      {cartItems?.map(item => (
+      {visibleItems?.map(item => (
         <View key={item.id}>
           <View style={styles.mainContainer}>
             <View style={styles.imageContainer}>

@@ -16,5 +16,6 @@ export const colors = {
   placeholderText: '#8891A5',
   black02: "#616A7D",
   offWhite: '#FAFBFD',
-  offGray: '#A1A1AB'
+  offGray: '#A1A1AB',
+  offRed: '#FF8181'
 };

@@ -12,13 +12,21 @@ import {
   increaseQuantity,
   selectCartData,
 } from '../redux/slices/cartSlice';
+import {
+  addToFavourite,
+  removeFromFavourite,
+  selectFavouriteData,
+} from '../redux/slices/favouriteSlice';
 
 const ProductCard = ({allProducts}) => {
   const dispatch = useDispatch();
   const items = useSelector(selectCartData);
-  console.log('first', items);
+  const favourites = useSelector(selectFavouriteData);
+  console.log('first', favourites);
 
   const isAddedToCart = productId => items.some(item => item.id === productId);
+  const isFavourite = productId =>
+    favourites.some(item => item.id === productId);
 
   const handleAddToCart = product => {
     dispatch(addToCart({item: product}));
@@ -30,6 +38,14 @@ const ProductCard = ({allProducts}) => {
 
   const handleDecreaseQuantity = productId => {
     dispatch(decreaseQuantity({id: productId}));
+  };
+
+  const handleToggleFavourite = product => {
+    if (isFavourite(product.id)) {
+      dispatch(removeFromFavourite({id: product.id}));
+    } else {
+      dispatch(addToFavourite({item: product}));
+    }
   };
 
   return (
@@ -86,8 +102,14 @@ const ProductCard = ({allProducts}) => {
                 </TouchableOpacity>
               </View>
             )}
-            <TouchableOpacity style={styles.heartIcon}>
-              <HeartIcon height={13.55} width={14.55} />
+            <TouchableOpacity
+              onPress={() => handleToggleFavourite(product)}
+              style={styles.heartIcon}>
+              {isFavourite(product.id) ? (
+                <HeartIcon height={15} width={16} fill={colors.offRed} />
+              ) : (
+                <HeartIcon height={15} width={16} />
+              )}
             </TouchableOpacity>
           </TouchableOpacity>
         </View>
@@ -132,8 +154,8 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     position: 'absolute',
-    left: 13,
-    top: 13,
+    left: -10,
+    top: -2,
     zIndex: 1,
   },
   circle: {
