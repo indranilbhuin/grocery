@@ -9,7 +9,7 @@ import Lottie from 'lottie-react-native';
 const FavouriteScreen = () => {
   const favourites = useSelector(selectFavouriteData);
   return (
-    <View style={styles.mainContainer}>
+    <View>
       <View style={styles.topContainer}>
         <Text style={styles.titleText}>Your Wishlist</Text>
       </View>
@@ -17,13 +17,20 @@ const FavouriteScreen = () => {
         {favourites?.length !== 0 ? (
           <ProductCard allProducts={favourites} />
         ) : (
-          <View style={{alignItems: 'center', justifyContent: 'center', height: '90%'}}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '90%',
+            }}>
             <Lottie
               style={styles.lottieImage}
               source={require('../../../assets/jsons/emptyWishlist.json')}
               autoPlay
             />
-            <Text style={styles.productNotFoundText}>You haven't added anything to wishlist</Text>
+            <Text style={styles.productNotFoundText}>
+              You haven't added anything to wishlist
+            </Text>
           </View>
         )}
       </View>
@@ -34,9 +41,6 @@ const FavouriteScreen = () => {
 export default FavouriteScreen;
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    // height: '80%',
-  },
   topContainer: {
     height: 70,
     backgroundColor: colors.navyBlue,

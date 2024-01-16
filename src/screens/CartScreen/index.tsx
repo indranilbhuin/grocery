@@ -1,10 +1,4 @@
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import HeaderContainer from '../../components/HeaderContainer';
 import {colors} from '../../../assets/colors';
@@ -12,6 +6,7 @@ import ProductList from '../../components/ProductList';
 import {useSelector} from 'react-redux';
 import {selectCartData, selectCartTotal} from '../../redux/slices/cartSlice';
 import Lottie from 'lottie-react-native';
+import styles from './style';
 
 const CartScreen = () => {
   const items = useSelector(selectCartData);
@@ -65,7 +60,12 @@ const CartScreen = () => {
           </View>
         </>
       ) : (
-        <View style={{alignItems: 'center', justifyContent: 'center', height: '80%'}}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '80%',
+          }}>
           <Lottie
             style={styles.lottieImage}
             source={require('../../../assets/jsons/noCart.json')}
@@ -79,70 +79,3 @@ const CartScreen = () => {
 };
 
 export default CartScreen;
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: colors.white,
-    height: '100%',
-  },
-  listContainer: {
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    marginTop: 30,
-  },
-  editText: {
-    alignSelf: 'flex-end',
-    fontFamily: 'Manrope-Medium',
-    fontSize: 12,
-    color: colors.navyBlue,
-  },
-  bottomContainer: {
-    paddingLeft: '5%',
-    paddingRight: '5%',
-  },
-  checkoutContainer: {
-    width: '95%',
-    height: 250,
-    backgroundColor: colors.primaryText,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    position: 'absolute',
-    bottom: 0,
-    alignSelf: 'center',
-    padding: 17,
-    justifyContent: 'space-between',
-  },
-  totalText: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 14,
-    color: colors.black02,
-  },
-  totalContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 14.5,
-    paddingHorizontal: 10,
-  },
-  checkoutButton: {
-    backgroundColor: colors.navyBlue,
-    height: 56,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkoutText: {
-    fontFamily: 'Manrope-SemiBold',
-    includeFontPadding: false,
-    fontSize: 14,
-    color: colors.white,
-  },
-  lottieImage: {
-    height: 200,
-    width: 200,
-  },
-  productNotFoundText: {
-    fontFamily: 'Manrope-Bold',
-    fontSize: 14,
-    color: colors.charcoalBlack,
-  },
-});

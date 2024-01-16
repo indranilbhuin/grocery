@@ -1,7 +1,6 @@
 import {
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -16,17 +15,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchAllProductsRequest,
   selectAllProductsData,
+  selectAllProductsError,
+  selectAllProductsLoading,
 } from '../../redux/slices/allProductsSlice';
 import DropDownIcon from '../../../assets/images/downArrow.svg';
 import DropDown from '../../components/DropDown';
 import Lottie from 'lottie-react-native';
-import {navigate} from '../../utils/navigationUtils';
 import CartIcon from '../../components/CartIcon';
 import {selectCartData} from '../../redux/slices/cartSlice';
+import styles from './style';
 
 const HomeScreen = () => {
   const [searchText, setSearchText] = useState('');
   const allProducts = useSelector(selectAllProductsData);
+  const isLoading = useSelector(selectAllProductsLoading);
+  const isError = useSelector(selectAllProductsError);
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
   const [isAddressDropdownVisible, setIsAddressDropdownVisible] =
     useState(false);
@@ -83,6 +86,23 @@ const HomeScreen = () => {
     setFilteredProducts(filtered);
   };
 
+  if (isError) {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Lottie
+          style={styles.lottieImage}
+          source={require('../../../assets/jsons/error.json')}
+          autoPlay
+        />
+        <Text style={styles.productNotFoundText}>Some Error Occured</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <StatusBar backgroundColor={colors.navyBlue} barStyle={'light-content'} />
@@ -136,7 +156,22 @@ const HomeScreen = () => {
             ]}>
             Recommended
           </Text>
-          {filteredProducts?.length !== 0 ? (
+          {isLoading ? (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Lottie
+                style={styles.lottieImage}
+                source={require('../../../assets/jsons/loading.json')}
+                autoPlay
+              />
+              <Text style={styles.productNotFoundText}>
+                Product's are loading
+              </Text>
+            </View>
+          ) : filteredProducts?.length !== 0 ? (
             <ProductCard allProducts={filteredProducts} />
           ) : (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -170,84 +205,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  searchBarContainer: {
-    justifyContent: 'flex-start',
-    backgroundColor: colors.midnightBlue,
-    borderRadius: 28,
-    width: '100%',
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 5,
-    paddingHorizontal: 28,
-  },
-  searchBar: {
-    color: colors.pureWhite,
-    fontFamily: 'Manrope-Medium',
-    fontSize: 14,
-    width: '100%',
-    includeFontPadding: false,
-  },
-  headerContainer: {
-    height: 220,
-    backgroundColor: colors.navyBlue,
-    width: '100%',
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    justifyContent: 'space-around',
-  },
-  titleText: {
-    fontFamily: 'Manrope-SemiBold',
-    includeFontPadding: false,
-    fontSize: 22,
-    color: colors.primaryText,
-  },
-  searchIcon: {
-    marginRight: 12,
-  },
-  titleContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  smallText: {
-    fontSize: 11,
-    fontFamily: 'Manrope-ExtraBold',
-    color: colors.primaryText,
-    opacity: 0.5,
-  },
-  buttonContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  scrollContainer: {
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    marginTop: 27,
-    marginBottom: 250,
-  },
-  productCardContainer: {
-    marginTop: 12,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  addressText: {
-    fontFamily: 'Manrope-Medium',
-    fontSize: 14,
-    marginRight: 10,
-    color: colors.primaryText,
-  },
-  lottieImage: {
-    height: 200,
-    width: 200,
-  },
-  productNotFoundText: {
-    fontFamily: 'Manrope-Bold',
-    fontSize: 14,
-    color: colors.charcoalBlack,
-  },
-});
